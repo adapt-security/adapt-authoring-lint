@@ -14,5 +14,8 @@
   },
   "dependencies": {
     "eslint": "6.5.1"
+  },
+  "peerDependencies": {
+    "adapt-authoring-core": "git+https://github.com/taylortom/adapt-authoring-core.git"
   }
 }

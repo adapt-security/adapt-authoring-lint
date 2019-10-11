@@ -2,6 +2,9 @@ const chalk = require('chalk');
 const CLIEngine = require("eslint").CLIEngine;
 const glob = require('glob');
 const path = require('path');
+const { Utils } = require('adapt-authoring-core');
+
+const pkg = require(path.join(process.cwd(), 'package.json'));
 
 function init() {
   const options = {
@@ -40,7 +43,16 @@ function loadRules() {
 }
 
 function getFiles() {
-  return glob.sync('/Users/tom/Projects/adapt_authoring_restructure/adapt-authoring-core/lib/*.js');;
+  const files = [];
+  Object.keys(pkg.dependencies).map(d => {
+    const ddir = Utils.getModuleDir(d);
+    try {
+      const dpkg = require(path.join(ddir, 'package.json'));
+    } catch(e) {}
+    const globFiles = glob.sync('**/*.js', { cwd: ddir, ignore: ['node_modules/**/*', 'conf/*'] });
+    files.push(...globFiles.map(f => path.join(ddir, f)));
+  });
+  return files;
 }
 
 function colour(message, severity) {
