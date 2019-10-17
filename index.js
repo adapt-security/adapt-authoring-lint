@@ -2,20 +2,21 @@ const chalk = require('chalk');
 const CLIEngine = require("eslint").CLIEngine;
 const glob = require('glob');
 const path = require('path');
-const { Utils } = require('adapt-authoring-core');
+const { App, Utils } = require('adapt-authoring-core');
 
-const pkg = require(path.join(process.cwd(), 'package.json'));
+const app = App.instance;
 
 function init() {
   const options = {
-    parserOptions: {
-      ecmaVersion: 2017
+    baseConfig: {
+      env: {
+        es2020: true,
+        node: true,
+        mocha: true
+      },
+      extends: getConfig('extends')
     },
-    env: {
-      node: true,
-      es6: true
-    },
-    rules: loadRules()
+    rules: getConfig('rules')
   };
   const files = getFiles();
   const report = new CLIEngine(options).executeOnFiles(files);
@@ -34,23 +35,27 @@ function init() {
   });
 }
 
-function loadRules() {
+function getConfig(key) {
+  return app.config.get(`adapt-authoring-lint.${key}`);
+}
+
+function loadLocalConfig() {
   try {
     return require(path.join(process.cwd(), 'conf', 'core.eslint.js'))
   } catch(e) {
     console.log(e);
+    return {};
   }
 }
 
 function getFiles() {
   const files = [];
-  Object.keys(pkg.dependencies).map(d => {
+  Object.keys(app.dependencies).map(d => {
     const ddir = Utils.getModuleDir(d);
     try {
-      const dpkg = require(path.join(ddir, 'package.json'));
+      const includes = require(path.join(ddir, 'package.json')).adapt_authoring.lint.includes.source;
+      files.push(...glob.sync(includes, { cwd: ddir }).map(f => path.join(ddir, f)));
     } catch(e) {}
-    const globFiles = glob.sync('**/*.js', { cwd: ddir, ignore: ['node_modules/**/*', 'conf/*'] });
-    files.push(...globFiles.map(f => path.join(ddir, f)));
   });
   return files;
 }
