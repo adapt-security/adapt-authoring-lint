@@ -6,7 +6,9 @@ const { App, Utils } = require('adapt-authoring-core');
 
 const app = App.instance;
 
-function init() {
+async function init() {
+  await app.onReady();
+
   const options = {
     baseConfig: {
       env: {
@@ -16,7 +18,8 @@ function init() {
       },
       extends: getConfig('extends')
     },
-    rules: getConfig('rules')
+    rules: getConfig('rules'),
+    ignorePattern: '!node_modules/*'
   };
   const files = getFiles();
   const report = new CLIEngine(options).executeOnFiles(files);
@@ -28,6 +31,8 @@ function init() {
     }
     console.log(chalk.cyan(r.filePath));
     r.messages.forEach(m => {
+      if(!m.line) m.line = 'X';
+      if(!m.column) m.column = 'X';
       const loc = `[${m.line}:${m.column}]`;
       console.log(`  ${colour(loc, m.severity)} ${m.message}`);
     });
@@ -39,25 +44,13 @@ function getConfig(key) {
   return app.config.get(`adapt-authoring-lint.${key}`);
 }
 
-function loadLocalConfig() {
-  try {
-    return require(path.join(process.cwd(), 'conf', 'core.eslint.js'))
-  } catch(e) {
-    console.log(e);
-    return {};
-  }
-}
-
 function getFiles() {
-  const files = [];
-  Object.keys(app.dependencies).map(d => {
-    const ddir = Utils.getModuleDir(d);
+  return Object.values(app.dependencies).reduce((files, d) => {
     try {
-      const includes = require(path.join(ddir, 'package.json')).adapt_authoring.lint.includes.source;
-      files.push(...glob.sync(includes, { cwd: ddir }).map(f => path.join(ddir, f)));
+      files.push(...glob.sync('lib/**/*.js', { cwd: d.rootDir, realpath: true }));
     } catch(e) {}
-  });
-  return files;
+    return files;
+  }, []);
 }
 
 function colour(message, severity) {
