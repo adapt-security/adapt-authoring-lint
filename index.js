@@ -1,8 +1,7 @@
 const chalk = require('chalk');
 const CLIEngine = require("eslint").CLIEngine;
 const glob = require('glob');
-const path = require('path');
-const { App, Utils } = require('adapt-authoring-core');
+const { App } = require('adapt-authoring-core');
 
 const app = App.instance;
 
