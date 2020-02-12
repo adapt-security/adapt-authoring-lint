@@ -9,6 +9,8 @@ const app = App.instance;
 async function init() {
   await app.onReady();
 
+  const isDebug = getConfig('debug');
+
   const options = {
     baseConfig: {
       env: {
@@ -23,21 +25,25 @@ async function init() {
   };
   const files = getFiles();
   const report = new CLIEngine(options).executeOnFiles(files);
+  const rootPath = app.getConfig('root_dir');
 
-  console.log(`Linted ${files.length} files. ${colour(report.errorCount, 2)} errors, ${colour(report.warningCount, 1)} warnings\n`);
   report.results.forEach(r => {
     if(!r.messages.length) {
       return;
     }
-    console.log(chalk.cyan(r.filePath));
-    r.messages.forEach(m => {
+    console.log(chalk.cyan(r.filePath.replace(rootPath, '')));
+    r.messages.sort((a,b) => (a.severity === 2) ? -1 : 1).forEach(m => {
       if(!m.line) m.line = 'X';
       if(!m.column) m.column = 'X';
       const loc = `[${m.line}:${m.column}]`;
-      console.log(`  ${colour(loc, m.severity)} ${m.message}`);
+      const debug = isDebug ? ` (${m.ruleId})` : '';
+      console.log(`  ${colour(loc, m.severity)} ${m.message}${debug}`);
     });
     console.log();
   });
+  console.log(`${'-'.repeat(100)}\n`);
+  console.log(`  Linted ${files.length} files. ${colour(report.errorCount, 2)} errors, ${colour(report.warningCount, 1)} warnings\n`);
+  console.log(`${'-'.repeat(100)}\n`);
 }
 
 function getConfig(key) {
