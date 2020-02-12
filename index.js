@@ -3,6 +3,8 @@ const CLIEngine = require("eslint").CLIEngine;
 const glob = require('glob');
 const { App } = require('adapt-authoring-core');
 
+const WARN = 1, ERROR = 2;
+
 const app = App.instance;
 
 async function init() {
@@ -18,7 +20,7 @@ async function init() {
       return;
     }
     console.log(chalk.cyan(r.filePath.replace(rootPath, '')));
-    r.messages.sort((a,b) => (a.severity === 2) ? -1 : 1).forEach(m => {
+    r.messages.sort(a => (a.severity === ERROR) ? -1 : 1).forEach(m => {
       if(!m.line) m.line = 'X';
       if(!m.column) m.column = 'X';
       const loc = `[${m.line}:${m.column}]`;
@@ -28,8 +30,9 @@ async function init() {
     console.log();
   });
   console.log(`${'-'.repeat(100)}\n`);
-  console.log(`  Linted ${files.length} files. ${colour(report.errorCount, 2)} errors, ${colour(report.warningCount, 1)} warnings\n`);
+  console.log(`  Linted ${files.length} files. ${colour(report.errorCount, ERROR)} errors, ${colour(report.warningCount, WARN)} warnings\n`);
   console.log(`${'-'.repeat(100)}\n`);
+  process.exit();
 }
 
 function getConfig(key) {
@@ -47,9 +50,9 @@ function getFiles() {
 
 function colour(message, severity) {
   switch(severity) {
-    case 1: // warning
+    case WARN: // warning
       return chalk.yellow(message);
-    case 2: // error
+    case ERROR: // error
       return chalk.red(message);
     default:
       return message;
