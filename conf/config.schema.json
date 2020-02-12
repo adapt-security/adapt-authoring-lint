@@ -10,7 +10,6 @@
     "rules": {
       "type": "object",
       "description": "Defines or extends the set of rules used by the linter"
-      "default": {}
     }
   }
 }
