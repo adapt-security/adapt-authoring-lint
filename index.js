@@ -10,22 +10,9 @@ async function init() {
   await app.onReady();
 
   const isDebug = getConfig('debug');
-
-  const options = {
-    baseConfig: {
-      env: {
-        es2020: true,
-        node: true,
-        mocha: true
-      },
-      extends: getConfig('extends')
-    },
-    rules: getConfig('rules'),
-    ignorePattern: '!node_modules/*'
-  };
-  const files = getFiles();
-  const report = new CLIEngine(options).executeOnFiles(files);
   const rootPath = app.getConfig('root_dir');
+  const files = getFiles();
+  const report = new CLIEngine({ configFile: `${rootPath}/.eslintrc.js` }).executeOnFiles(files);
 
   report.results.forEach(r => {
     if(!r.messages.length) {
