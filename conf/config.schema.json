@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "extends": {
+      "type": "string",
+      "description": "A string that specifies an ESLint configuration (either a path to a config file or the name of a shareable config)",
+      "default": "eslint:recommended"
+    },
+    "rules": {
+      "type": "object",
+      "description": "Defines or extends the set of rules used by the linter"
+      "default": {}
+    }
+  }
+}
