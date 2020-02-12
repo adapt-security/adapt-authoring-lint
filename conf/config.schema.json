@@ -4,8 +4,7 @@
   "properties": {
     "extends": {
       "type": "string",
-      "description": "A string that specifies an ESLint configuration (either a path to a config file or the name of a shareable config)",
-      "default": "eslint:recommended"
+      "description": "A string that specifies an ESLint configuration (either a path to a config file or the name of a shareable config)"
     },
     "rules": {
       "type": "object",
