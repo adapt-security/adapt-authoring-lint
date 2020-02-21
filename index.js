@@ -13,7 +13,10 @@ async function init() {
   const isDebug = getConfig('debug');
   const rootPath = app.getConfig('root_dir');
   const files = getFiles();
-  const report = new CLIEngine({ configFile: `${rootPath}/.eslintrc.js` }).executeOnFiles(files);
+  const report = new CLIEngine({
+    configFile: `${rootPath}/.eslintrc.js`,
+    ignorePattern: '!node_modules/*'
+  }).executeOnFiles(files);
 
   report.results.forEach(r => {
     if(!r.messages.length) {
