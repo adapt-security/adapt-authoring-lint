@@ -1,3 +1,4 @@
+/* eslint no-console: 0 */
 const chalk = require('chalk');
 const CLIEngine = require("eslint").CLIEngine;
 const glob = require('glob');
@@ -11,7 +12,7 @@ async function init() {
   await app.onReady();
 
   const isDebug = getConfig('debug');
-  const rootPath = app.getConfig('root_dir');
+  const rootPath = app.getConfig('rootDir');
   const files = getFiles();
   const report = new CLIEngine({
     configFile: `${rootPath}/.eslintrc.js`,
@@ -23,7 +24,7 @@ async function init() {
       return;
     }
     console.log(chalk.cyan(r.filePath.replace(rootPath, '')));
-    r.messages.sort(a => (a.severity === ERROR) ? -1 : 1).forEach(m => {
+    r.messages.sort(a => a.severity === ERROR ? -1 : 1).forEach(m => {
       if(!m.line) m.line = 'X';
       if(!m.column) m.column = 'X';
       const loc = `[${m.line}:${m.column}]`;
@@ -32,9 +33,9 @@ async function init() {
     });
     console.log();
   });
-  console.log(`${'-'.repeat(100)}\n`);
+  console.log(`${'-'.repeat(85)}\n`);
   console.log(`  Linted ${files.length} files. ${colour(report.errorCount, ERROR)} errors, ${colour(report.warningCount, WARN)} warnings\n`);
-  console.log(`${'-'.repeat(100)}\n`);
+  console.log(`${'-'.repeat(85)}\n`);
   process.exit();
 }
 
