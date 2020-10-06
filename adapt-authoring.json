@@ -1,3 +1,6 @@
 {
+  "documentation": {
+    "enable": true
+  },
   "module": false
 }
