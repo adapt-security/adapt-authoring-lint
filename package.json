@@ -13,6 +13,6 @@
     "eslint": "^7.9.0"
   },
   "peerDependencies": {
-    "adapt-authoring-core": "github:adapt-security/adapt-authoring-core.git"
+    "adapt-authoring-core": "adapt-security/adapt-authoring-core"
   }
 }
