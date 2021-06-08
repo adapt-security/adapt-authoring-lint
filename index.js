@@ -12,10 +12,9 @@ async function init() {
   await app.onReady();
 
   const isDebug = getConfig('debug');
-  const rootPath = app.getConfig('rootDir');
   const files = getFiles();
   const report = new CLIEngine({
-    configFile: `${rootPath}/.eslintrc.js`,
+    configFile: `${app.rootDir}/.eslintrc.js`,
     ignorePattern: '!node_modules/*'
   }).executeOnFiles(files);
 
@@ -23,7 +22,7 @@ async function init() {
     if(!r.messages.length) {
       return;
     }
-    console.log(chalk.cyan(r.filePath.replace(rootPath, '')));
+    console.log(chalk.cyan(r.filePath.replace(app.rootDir, '')));
     r.messages.sort(a => a.severity === ERROR ? -1 : 1).forEach(m => {
       if(!m.line) m.line = 'X';
       if(!m.column) m.column = 'X';
