@@ -1,6 +1,6 @@
 /* eslint no-console: 0 */
 const chalk = require('chalk');
-const CLIEngine = require("eslint").CLIEngine;
+const { ESLint } = require("eslint");
 const glob = require('glob');
 const { App } = require('adapt-authoring-core');
 
