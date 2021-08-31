@@ -4,6 +4,9 @@
   "description": "Module for performing linting on the Adapt authoring tool",
   "homepage": "https://github.com/taylortom/adapt-authoring-lint",
   "main": "index.js",
+  "bin": {
+    "aat-lint": "./index.js"
+  },
   "adapt_authoring": {
     "documentation": {
       "enable": true

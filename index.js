@@ -62,4 +62,4 @@ function colour(message, severity) {
   }
 }
 
-module.exports = init;
+module.exports = init();
