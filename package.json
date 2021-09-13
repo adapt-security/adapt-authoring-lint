@@ -7,11 +7,6 @@
   "bin": {
     "aat-lint": "./index.js"
   },
-  "adapt_authoring": {
-    "documentation": {
-      "enable": true
-    }
-  },
   "dependencies": {
     "eslint": "^7.9.0"
   },
