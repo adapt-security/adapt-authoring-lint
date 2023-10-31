@@ -1,7 +1,7 @@
 /* eslint no-console: 0 */
 const chalk = require('chalk');
 const { ESLint } = require("eslint");
-const glob = require('glob');
+const { globSync } = require('glob');
 const { App } = require('adapt-authoring-core');
 
 const WARN = 1, ERROR = 2;
