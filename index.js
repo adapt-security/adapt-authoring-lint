@@ -13,7 +13,7 @@ async function init() {
 
   const isDebug = getConfig('debug');
   const files = getFiles();
-  const report = new CLIEngine({
+  const report = new ESLint.CLIEngine({
     configFile: `${app.rootDir}/.eslintrc.js`,
     ignorePattern: '!node_modules/*'
   }).executeOnFiles(files);
@@ -45,7 +45,7 @@ function getConfig(key) {
 function getFiles() {
   return Object.values(app.dependencies).reduce((files, d) => {
     try {
-      files.push(...glob.sync('lib/**/*.js', { cwd: d.rootDir, realpath: true }));
+      files.push(...globSync('lib/**/*.js', { cwd: d.rootDir, realpath: true }));
     } catch(e) {}
     return files;
   }, []);
