@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "eslint": "^7.32.0",
+    "eslint": "^9.10.0",
     "glob": "^10.3.10"
   },
   "peerDependencies": {
